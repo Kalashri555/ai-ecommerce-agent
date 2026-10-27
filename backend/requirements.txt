@@ -1,0 +1,11 @@
+# Versions verified with Python 3.13 (3.11+ should work).
+fastapi==0.162.0
+uvicorn==0.54.0
+sqlalchemy==2.1.6
+pydantic==2.14.1
+pydantic-settings==2.16.1
+openai==3.37.0
+mcp==2.3.0
+python-dotenv==1.2.4
+httpx==0.28.1
+pytest==9.1.1

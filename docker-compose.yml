@@ -1,0 +1,38 @@
+# Run everything:   docker compose up --build
+# Then open:        http://localhost:5173   (API docs: http://localhost:8000/docs)
+#
+# Put OPENAI_API_KEY, OPENAI_MODEL and APP_SECRET_KEY in a .env file next to this
+# file (copy .env.example). The key is passed to the backend container at runtime
+# and is never baked into an image or sent to the browser.
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: sqlite:////data/ecommerce.db
+      FRONTEND_ORIGIN: http://localhost:5173
+    ports:
+      - "8000:8000"
+    volumes:
+      - ecommerce-data:/data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: http://localhost:8000
+    ports:
+      - "5173:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  ecommerce-data:
